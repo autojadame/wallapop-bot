@@ -1,6 +1,7 @@
 import {open} from './navigator.ts'
 import {move,click} from '../mouse'
 import {findButton} from './findButton.ts'
+import {findUpdate} from './findUpdate.ts'
 
 const sleep = (ms) => {
   return new Promise((resolve)=>{
@@ -11,28 +12,70 @@ const sleep = (ms) => {
 }
 
 const onRutine= async () => {
-  return await localStorage.getItem('rutine')
+  return await localStorage.getItem('rutine') == "1"
 }
 
-const startWallapop = async (setRutine,value) => {
-      await open()
+export const startWallapop = async (setRutine,value) => {
+      await window.electron.ipcRenderer.invoke('scroll_down_page')
       await sleep(500)
-      await window.electron.ipcRenderer.invoke('scroll_down',Number.MAX_VALUE)
-      const but = await findButton()
-      console.log(but)
-      /*if(!onRutine())
+      await window.electron.ipcRenderer.invoke('scroll_down_page')
+      await sleep(500)
+      if(!(await onRutine()))
         return
+      const but = await findButton(value?.button)
       if(but){
+        console.log(but)
+        if(but.equal){
+          setRutine(false)
+          return;
+        }
+        if(!(await onRutine()))
+          return
         await move(but)
+        if(!(await onRutine()))
+          return
         await click()
-        setTimeout(() => {
-          await localStorage.setItem('rutine-wallapop',time)
-          window.electron.ipcRenderer.sendMessage('cerrar_ventana')
-        }, 5000);
+        if(!(await onRutine()))
+          return
+        await sleep(5000)
+        if(!(await onRutine()))
+          return
+        await window.electron.ipcRenderer.invoke('scroll_down_page')
+        await sleep(500)
+        await window.electron.ipcRenderer.invoke('scroll_down_page')
+        await sleep(500)
+        if(!(await onRutine()))
+          return
+        const butActualizr = value?.update ?? await findUpdate()
+        if(!(await onRutine()))
+          return
+        if(butActualizr) {
+          await move(butActualizr)
+          if(!(await onRutine()))
+            return
+          await click()
+          if(!(await onRutine()))
+            return
+          await sleep(3000)
+          if(!(await onRutine()))
+            return
+          startWallapop(setRutine,{
+            button:but,
+            update:butActualizr
+          })
+        }
+        else{
+          startWallapop(setRutine,{
+            button:but
+          })
+        }
+
       }
       else{
-        readyForStart(anydesk,setRutine,onRutine,initial,tries+1)
-      }*/
+        console.error("Couldn't find button!")
+        setRutine(false)
+      }
+
 
 
 }

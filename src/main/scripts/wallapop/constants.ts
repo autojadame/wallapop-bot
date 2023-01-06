@@ -8,5 +8,8 @@ export const colors = {
     r:244,
     g:245,
     b:247
+  },
+  update:{
+    r:19, g:193, b:172
   }
 }

@@ -1,9 +1,9 @@
 {
-  "name": "Clickfarm",
-  "appId": "Clickfarm",
-  "version": "1.0.41",
-  "productName": "Clickfarm",
-  "description": "Clickfarm controller",
+  "name": "Wallabot",
+  "appId": "Wallabot",
+  "version": "1.0.0",
+  "productName": "Wallabot",
+  "description": "Wallabot controller",
   "license": "MIT",
   "main": "./dist/main/main.js",
   "scripts": {

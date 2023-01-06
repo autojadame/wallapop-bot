@@ -1,9 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import Login from './views/login'
-import Loading from './views/loading'
-import useRutines from '../rutines'
+import Main from './views/main'
 
 const AppContainer = styled.div`
   background-color: #4158D0;
@@ -12,12 +10,11 @@ const AppContainer = styled.div`
   height:100%;
 `
 export default function App() {
-  const rutines = useRutines()
   return (
     <AppContainer>
       <Router>
         <Routes>
-          <Route path="/" element={<Main rutines={rutines} />} />
+          <Route path="/" element={<Main />} />
         </Routes>
       </Router>
     </AppContainer>

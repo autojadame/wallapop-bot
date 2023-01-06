@@ -9,7 +9,7 @@
  * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import path from 'path';
-import { app, BrowserWindow, shell, ipcMain, Tray,Menu,desktopCapturer } from 'electron';
+import { app, BrowserWindow, shell, ipcMain, Menu,desktopCapturer } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -17,17 +17,8 @@ import { resolveHtmlPath } from './util';
 import './screen'
 import './scripts'
 import {initializeWindow} from './screen'
-import AutoLaunch from 'auto-launch'
 
 
-let autoLaunch = new AutoLaunch({
-    name: 'Clickfarm',
-    path: app.getPath('exe'),
-    isHidden:true
-});
-autoLaunch.isEnabled().then((isEnabled) => {
-  if (!isEnabled) autoLaunch.enable();
-});
 class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
@@ -51,15 +42,8 @@ class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
-let frameWindow: BrowserWindow | null = null;
-
-var isQuiting = false
 
 
-ipcMain.on('restore', async (event, arg) => {
-    if(mainWindow)
-      mainWindow.show()
-});
 ipcMain.handle('version',()=>{
   return app.getVersion()
 })
@@ -109,8 +93,8 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 728,
+    width: 500,
+    height: 300,
     resizable: false,
     fullscreenable: false,
     icon: getAssetPath('icon.png'),
@@ -122,38 +106,9 @@ const createWindow = async () => {
         : path.join(__dirname, '../../.erb/dll/preload.js')
     },
   });
-  frameWindow = new BrowserWindow({
-    show: false,
-    width: 1024,
-    height: 728,
-    icon: getAssetPath('icon.png'),
-    autoHideMenuBar:true,
-    frame:false,
-    transparent:true,
-    webPreferences: {
-      transparent:true,
-      preload: app.isPackaged
-      ? path.join(__dirname, 'preload.js')
-      : path.join(__dirname, '../../.erb/dll/preload.js')
-    },
-  });
-  mainWindow.on('minimize', (e) => {
-    mainWindow.hide()
-    e.preventDefault()
-  });
-  frameWindow.on('minimize', (e) => {
-    frameWindow.hide()
-    e.preventDefault()
-  });
-  frameWindow.on('close', (e) => {
-    if(!isQuiting){
-      frameWindow.hide()
-      e.preventDefault();
-    }
-  });
-  ipcMain.on('hide-frame', async (event, arg) => {
-      frameWindow.hide()
-  });
+
+
+
   mainWindow.webContents.on('did-finish-load', () => {
     initializeWindow(mainWindow);
     setInterval(()=>{
@@ -164,43 +119,11 @@ const createWindow = async () => {
 
       }
     },60000)
-    frameWindow.maximize()
-    frameWindow.loadURL(resolveHtmlPath('frame.html'));
-
+    mainWindow.show()
   })
-  mainWindow.on('close', (e) => {
-    if(!isQuiting){
-      mainWindow.hide()
-      e.preventDefault();
-    }
-  });
+
   mainWindow.loadURL(resolveHtmlPath('index.html'));
 
-  const tray = new Tray(getAssetPath('icon.png'));
-  tray.setContextMenu(Menu.buildFromTemplate([
-    {
-      label: 'Show App', click: function () {
-        mainWindow.show();
-      }
-    },
-    {
-      label: 'Quit', click: function () {
-        isQuiting = true;
-        app.quit();
-      }
-    },
-    {
-      label: 'Show square video',click: function() {
-        frameWindow.show()
-      }
-    }
-  ]));
-  tray.on("click", ()=>{
-    mainWindow.show();
-  });
-  mainWindow.on('closed', () => {
-    mainWindow = null;
-  });
 
 
 

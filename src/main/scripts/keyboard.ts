@@ -72,6 +72,12 @@ async function maximize(){
   })
 
 }
+ipcMain.handle('scroll_down_page',async () => {
+  return await pulseKeys(
+    Key.LeftControl,
+    Key.End
+  )
+})
 ipcMain.handle('open_browser',(event,page) => {
   return new Promise(async (resolve)=>{
     await openProgram(`chrome.exe  --new-window "${page}"`)
