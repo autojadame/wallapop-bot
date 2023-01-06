@@ -1,0 +1,19 @@
+{
+  "name": "Clickfarm",
+  "appId": "Clickfarm",
+  "version": "1.0.41",
+  "productName": "Clickfarm",
+  "description": "Clickfarm controller",
+  "license": "MIT",
+  "main": "./dist/main/main.js",
+  "scripts": {
+    "rebuild": "node -r ts-node/register ../../.erb/scripts/electron-rebuild.js",
+    "postinstall": "npm run rebuild && npm run link-modules",
+    "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts",
+    "rebuildrobot": "npm rebuild --runtime=electron --target=16.10.0 --disturl=https://atom.io/download/atom-shell --abi=93"
+  },
+  "dependencies": {
+    "@nut-tree/nut-js": "^2.3.0",
+    "tesseract.js": "^4.0.2"
+  }
+}
