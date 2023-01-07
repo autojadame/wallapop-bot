@@ -236,8 +236,8 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "harusurv",
-      "repo": "Wallabot-controller"
+      "owner": "autojadame",
+      "repo": "wallapop-bot"
     }
   },
   "collective": {
