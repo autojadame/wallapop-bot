@@ -3,6 +3,7 @@ import { ipcMain,clipboard } from 'electron';
 import {randomIntFromInterval} from '../../utils/utils.ts'
 
 
+
 const executeWithDelay = (f) => {
   return new Promise((resolve)=>{
     setTimeout(async () => {
@@ -12,7 +13,7 @@ const executeWithDelay = (f) => {
   })
 
 }
-const pulseKeys = async (...keys) => {
+export const pulseKeys = async (...keys) => {
   try{
     await keyboard.pressKey(...keys)
   }

@@ -31,3 +31,6 @@ ipcMain.handle('mouse_click',async ()=>{
 ipcMain.handle('scroll_down',async (event,amount = 150) => {
     await mouse.scrollDown(amount)
 })
+ipcMain.handle('scroll_up',async (event,amount = 150) => {
+    await mouse.scrollUp(amount)
+})

@@ -11,5 +11,10 @@ export const colors = {
   },
   update:{
     r:19, g:193, b:172
+  },
+  reservado:{
+    r:67,
+    g:104,
+    b:204
   }
 }

@@ -10,6 +10,15 @@ const Container = styled.div`
   justify-content:center;
   align-items:center;
 `
+const VersionContainer = styled.div`
+  color:#ffffff;
+  opacity:0.7;
+  position:fixed;
+  bottom:5px;
+  right:5px;
+  font-size:13px;
+  font-weight: lighter;
+`
 
 
 const LIMIT = 10
@@ -17,6 +26,10 @@ const Main = () => {
 
   const [onRutine,setOnRutine] = useState(false)
   const seconds = useRef(LIMIT)
+  const [version,setVersion] = useState("")
+  const getVersion = async () => {
+      setVersion(await window.electron.ipcRenderer.invoke('version'))
+    }
   const [secondsTt,setSecondsTT] = useState(new Date().getTime())
   const counter = () => {
     setTimeout(()=>{
@@ -48,6 +61,7 @@ const Main = () => {
 
   }
   useEffect(()=>{
+    getVersion()
     localStorage.setItem('rutine',"0")
   },[])
   return (
@@ -56,6 +70,9 @@ const Main = () => {
         const newVal = await localStorage.getItem('rutine')
         rutineSet(newVal == "1" ? false : true)
       }} title={seconds.current < LIMIT && seconds.current >= 0 ? `Prepare it! Click on Wallapop ${seconds.current}...` : onRutine ? "End" : "Start"} />
+      <VersionContainer>
+        {version}
+        </VersionContainer>
     </Container>
   )
 }
