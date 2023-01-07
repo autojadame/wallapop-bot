@@ -37,7 +37,7 @@ export const startWallapop = async (setRutine,value) => {
         await click()
         if(!(await onRutine()))
           return
-        await sleep(5000)
+        await sleep(2500)
         if(!(await onRutine()))
           return
         await window.electron.ipcRenderer.invoke('scroll_down_page')
@@ -56,7 +56,7 @@ export const startWallapop = async (setRutine,value) => {
           await click()
           if(!(await onRutine()))
             return
-          await sleep(3000)
+          await sleep(2500)
           if(!(await onRutine()))
             return
           startWallapop(setRutine,{
