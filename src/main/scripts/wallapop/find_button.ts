@@ -64,8 +64,8 @@ const resultText = (screenshot) => {
 ipcMain.handle('find-button-wallapop',async (event,{screenshot,lastButton})=>{
   const image = await Jimp.read(Buffer.from(screenshot.split(',')[1],"base64"))
   const lapizImage = await Jimp.read(Buffer.from(lapiz,"base64"))
-  const lapizX = 25
-  const lapizY = 25
+  const lapizX = 20
+  const lapizY = 20
   const size = image.bitmap.width - 200 > getContainerSize(image.bitmap.width) ? getContainerSize(image.bitmap.width) : image.bitmap.width - 200
   const sizeTotal = Math.floor((image.bitmap.width - 200 - size) / 2)
   const widthStart = image.bitmap.width - sizeTotal - 52
