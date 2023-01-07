@@ -16,20 +16,15 @@ const getContainerSize = (width) => {
   return 540
 }
 const calculateX = async ({widthStart,widthImage,y,imageCrop,lapizX,lapizY,lapizImage,image})=> {
-  for(var x = widthStart;x>= widthImage;x-=5){
+  for(var x = widthStart;x>= widthImage;x-=14){
     const pixel = image.getPixelIndex(x,y)
     const crop = imageCrop.crop(x,y,lapizX,lapizY)
+    crop.grayscale().threshold({max:200,replace:255}).invert().threshold({max:100,replace:255}).invert().autocrop()
     const distance = Jimp.distance(lapizImage, crop);
-    const diff = Jimp.diff(lapizImage, crop);
-    if(x == widthStart){
-      console.log(await crop.getBase64Async(Jimp.AUTO))
-    }
     imageCrop.bitmap.width =image.bitmap.width
     imageCrop.bitmap.height =image.bitmap.height
     imageCrop.bitmap.data =image.bitmap.data
-
-    // Pixel difference
-    if(distance < 0.03){
+    if(distance < 0.06){
       const pos = {
         x:Math.floor(x+(lapizX*0.5)),
         y:Math.floor(y+(lapizY*0.5))
@@ -46,6 +41,8 @@ const calculateX = async ({widthStart,widthImage,y,imageCrop,lapizX,lapizY,lapiz
         img
       }
     }
+
+
   }
   return
 }
@@ -67,7 +64,7 @@ const resultText = (screenshot) => {
 ipcMain.handle('find-button-wallapop',async (event,{screenshot,lastButton})=>{
   const image = await Jimp.read(Buffer.from(screenshot.split(',')[1],"base64"))
   const lapizImage = await Jimp.read(Buffer.from(lapiz,"base64"))
-  const lapizX = 24
+  const lapizX = 25
   const lapizY = 25
   const size = image.bitmap.width - 200 > getContainerSize(image.bitmap.width) ? getContainerSize(image.bitmap.width) : image.bitmap.width - 200
   const sizeTotal = Math.floor((image.bitmap.width - 200 - size) / 2)
@@ -88,7 +85,7 @@ ipcMain.handle('find-button-wallapop',async (event,{screenshot,lastButton})=>{
     }
   }
   else{
-    for(var y = heightImage;y>= 200;y-=5){
+    for(var y = heightImage;y>= 200;y-=14){
         const res = await calculateX({widthStart,widthImage,y,imageCrop,lapizX,lapizY,lapizImage,image})
         if(res)
           return res
