@@ -33,8 +33,6 @@ export const startWallapop = async (setRutine,value) => {
           setRutine(false)
           return;
         }
-        if(!(await onRutine()))
-          return
 
         if(!(await onRutine()))
           return
@@ -65,8 +63,6 @@ export const startWallapop = async (setRutine,value) => {
         await move(but)
 
         await click()
-        if(!(await onRutine()))
-          return
         if(!(await onRutine()))
           return
         await sleep(2500)
